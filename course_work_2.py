@@ -172,162 +172,207 @@ student1.print_student_details()
 student2.print_student_details()
 
 
-#Question 5
-#python code
-# generate_report.py
-# Generates a complete Word document with outputs from Q1 to Q4
-# Includes updated Q3(c) and full Q4 calculator
+
+#question 5
+# q5_final_python.py
+# Group 9 Final Submission
+# Generates Final_Answers_Group9.docx with ALL Q1–Q4 outputs
 
 from docx import Document
-from docx.shared import Pt, Inches
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
 from datetime import datetime
-import os
 
 # ==============================
-# Helper: Add section with title and content
+# CREATE DOCUMENT
 # ==============================
-def add_section(doc, title, content, is_code=False, language=""):
-    p = doc.add_paragraph()
-    run = p.add_run(title)
-    run.bold = True
-    run.font.size = Pt(14)
-    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-
-    if is_code:
-        para = doc.add_paragraph()
-        para.paragraph_format.space_before = Pt(6)
-        para.paragraph_format.space_after = Pt(6)
-        para.paragraph_format.left_indent = Inches(0.5)
-        run = para.add_run(content)
-        run.font.name = 'Courier New'
-        run.font.size = Pt(10)
-        if language:
-            lang_note = doc.add_paragraph(f"// Language: {language}", style='Caption')
-            lang_note.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    else:
-        for line in content.split('\n'):
-            if line.strip():
-                doc.add_paragraph(line, style='Normal')
-
-    doc.add_page_break()
+doc = Document()
 
 # ==============================
-# Main Document Generation
+# GROUP HEADER
 # ==============================
-def generate_python_report():
-    doc = Document()
-    doc.add_heading('COURSEWORK 1 AND 2 2025NOV - FULL REPORT', 0)
-    doc.add_paragraph(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M')} EAT")
-    doc.add_paragraph("Student: Kizza Moses | Reg No: 2025/U/123 | ID: 216022204\n", style='Intense Quote')
+doc.add_heading('FINAL ANSWERS - QUESTIONS 1 TO 4', 0)
+doc.add_paragraph("GROUP 9", style='Intense Quote')
 
-    # === QUESTION 1: CGPA + Basic Calculator ===
-    q1_code = '''# CGPA Calculator with File I/O and Word Export
-class StudentCGPA:
-    def __init__(self, student_id, name):
-        self.student_id = student_id
-        self.name = name
-        self.history = []
-        self.load_history()
+authors = [
+    "OKUJA EMMANUEL DILA JOHN      2500728777    25/U/28777/PSA",
+    "WASSWA KATEREGGA MAURICE      2500703613    25/U/03613/PSA",
+    "NANFUKA JUSTINE               2500703528    25/U/03528/PS",
+    "WAMIMBI CHRISTIAN             2500730993    25/U/30993/PSA"
+]
 
-    def calculate_cgpa(self, courses):
-        total_gp_cu = sum(c['gp'] * c['cu'] for c in courses)
-        total_cu = sum(c['cu'] for c in courses)
-        return round(total_gp_cu / total_cu, 2) if total_cu else 0.0
+for author in authors:
+    p = doc.add_paragraph(f"Author: {author}")
+    p.runs[0].bold = True
 
-    def add_semester(self, semester_name):
-        # Input 4 courses...
-        cgpa = self.calculate_cgpa(courses)
-        self.history.append({"semester": semester_name, "cgpa": cgpa})
-        self.generate_word_report()
+doc.add_paragraph(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')} EAT")
+doc.add_paragraph("")
 
-def basic_calculator():
-    students = [216022204, 216002204, 216007570, 216002774]
-    total = sum(students)
-    num_str = str(total).lstrip('8')
-    cu = [int(num_str[i:i+2]) for i in range(0, 8, 2)]
-    return cu  # [64, 3, 47, 52]
-'''
-    add_section(doc, "QUESTION 1: CGPA + Basic Calculator", q1_code, is_code=True, language="Python")
+# ==============================
+# QUESTION 1: CGPA + Basic Calculator
+# ==============================
+doc.add_heading('QUESTION 1: CGPA + Basic Calculator', 1)
 
-    # === QUESTION 2: C Struct ===
-    q2_code = '''struct course one;
-one.cName = "Data Structures";
-one.cCode = 1204;
+# Basic Calculator Output
+doc.add_heading('Basic Calculator Output', 2)
+basic_text = """Student Numbers: 216022204, 216002204, 216007570, 216002774
+Sum: 864034752
+Extracted CUs: CU1=64, CU2=3, CU3=47, CU4=52
 
+Results:
+• Addition: 166
+• Subtraction: -38
+• Multiplication: 469248
+• Division: 21.33"""
+doc.add_paragraph(basic_text)
+
+# CGPA Semester 1
+doc.add_heading('CGPA Semester 1 Output', 2)
+cgpa1_text = """CGPA Calculation Report
+Student ID: 2500728777
+Name: OKUJA EMMANUEL DILA JOHN
+Semester: Semester 1
+Date: 2025-11-15 12:45
+CGPA: 5.0 → Distinction
+
+Code | Course Name | Marks | Grade | GP | CU
+CSK 1101 | COMMUNICATION SKILLS | 80.0 | A | 5.0 | 4
+CSC 1102 | STRUCTURED AND OBJECT ORIENTED PROGRAMMING | 86.0 | A | 5.0 | 4
+CSC 1104 | COMMPUTER ORGANIZATION AND ARCHITECTURE | 89.0 | A | 5.0 | 4
+CSC 1105 | MATHEMATICS | 96.0 | A+ | 5.0 | 4
+
+Formula Used:
+CGPA = Σ(GPᵢ × CUᵢ) / ΣCUᵢ"""
+doc.add_paragraph(cgpa1_text)
+
+# CGPA Semester 2
+doc.add_heading('CGPA Semester 2 Output', 2)
+cgpa2_text = """CGPA Calculation Report
+Student ID: 2500728777
+Name: OKUJA EMMANUEL DILA JOHN
+Semester: Semester 2
+Date: 2025-11-15 12:52
+CGPA: 5.0 → Distinction
+
+Code | Course Name | Marks | Grade | GP | CU
+CSC 1200 | OPERATING SYSTEMS | 89.0 | A | 5.0 | 4
+CSC 1201 | PROBABILITY AND STATISTICS | 89.0 | A | 5.0 | 4
+CSC 1202 | SOFTWARE DEVELOPMENT AND DESIGN | 85.0 | A | 5.0 | 4
+IST 1204 | SYSTEMS ANALYSIS AND DESIGN | 90.0 | A+ | 5.0 | 4
+
+Formula Used:
+CGPA = Σ(GPᵢ × CUᵢ) / ΣCUᵢ"""
+doc.add_paragraph(cgpa2_text)
+
+doc.add_page_break()
+
+# ==============================
+# QUESTION 2: C Structure
+# ==============================
+doc.add_heading('QUESTION 2: C Structure Handling', 1)
+q2_text = """a) Initialization:
+struct course one;
+one.cName = "Computer Architecture";
+one.cCode = 1104;
+
+b) User Input:
 char buffer[100];
 printf("Enter Course Name: ");
 fgets(buffer, sizeof(buffer), stdin);
-one.cName = strdup(buffer);
+buffer[strcspn(buffer, "\\n")] = 0;
+one.cName = malloc(strlen(buffer) + 1);
+strcpy(one.cName, buffer);
+scanf("%d", &one.cCode);
 
+c) Pointer Access:
 struct course* ptr = &one;
-printf("Code: %d", ptr->cCode);
+printf("Course Code via pointer: %d\\n", ptr->cCode);
 
-void weThink(struct course c);'''
-    add_section(doc, "QUESTION 2: C Structure Handling", q2_code, is_code=True, language="C")
+d) Function Prototype:
+void weThink(struct course c);"""
+doc.add_paragraph(q2_text)
 
-    # === QUESTION 3: Error Handling + OOP ===
-    q3_oop = '''i. Inheritance
-Inheritance allows a subclass to inherit attributes/methods from a superclass.
+doc.add_page_break()
+
+# ==============================
+# QUESTION 3: Error Handling + OOP
+# ==============================
+doc.add_heading('QUESTION 3: Error Handling + OOP', 1)
+
+q3a_text = """a) Division by Zero:
+def calculate_average(amount_collected: int, number_of_users: int) -> float:
+    try:
+        average = amount_collected / number_of_users
+        return average
+    except ZeroDivisionError:
+        print("Error: Cannot divide by zero")
+        return 0.0"""
+doc.add_paragraph(q3a_text)
+
+q3b_text = """b) File Not Found:
+try:
+    with open("report.txt", "r") as file:
+        content = file.read()
+        print("File content:\\n", content)
+except FileNotFoundError:
+    print("File not found.")"""
+doc.add_paragraph(q3b_text)
+
+doc.add_heading('c) OOP Concepts', 2)
+oop_text = """i. Inheritance
+Inheritance allows a subclass to inherit from a superclass.
 class Animal:
     def __init__(self, name): self.name = name
     def speak(self): print("The animal makes a sound.")
 class Dog(Animal):
     def speak(self): print(f"{self.name} barks.")
-my_dog = Dog("Buddy"); my_dog.speak()  # Buddy barks.
+my_dog = Dog("Buddy"); my_dog.speak()  # Output: Buddy barks.
 
 ii. Encapsulation
-Bundles data and methods; hides internal state.
+Bundles data and methods with access control.
 class BankAccount:
     def __init__(self, balance): self.__balance = balance
     def deposit(self, amount):
         if amount > 0: self.__balance += amount
     def get_balance(self): return self.__balance
-account = BankAccount(100); account.deposit(50)
 
 iii. Polymorphism
 Same interface, different behavior.
 def make_animal_speak(animal): print(animal.speak())
 make_animal_speak(Dog())  # Woof!
-make_animal_speak(Cat())  # Meow!'''
-    add_section(doc, "QUESTION 3(c): OOP Concepts (Updated)", q3_oop, is_code=True, language="Python")
+make_animal_speak(Cat())  # Meow!"""
+doc.add_paragraph(oop_text)
 
-    # === QUESTION 4: Full Calculator Class ===
-    q4_full = '''class Calculator:
-    def __init__(self):
-        self.history = []
-        self.ops = {'+': self.add, '-': self.subtract, '*': self.multiply, '/': self.divide,
-                    '^': self.power, 'sqrt': self.sqrt}
+doc.add_page_break()
 
-    def add(self, a, b): return a + b
-    def divide(self, a, b):
-        if b == 0: raise ZeroDivisionError("Cannot divide by zero")
-        return a / b
+# ==============================
+# QUESTION 4: Calculator + Auth + Output
+# ==============================
+doc.add_heading('QUESTION 4: Calculator + Auth + Output', 1)
 
-    def execute(self, op, a, b=None):
-        result = self.ops[op](a, b if b is not None else a)
-        self.history.append(f"{a} {op} {b if b else ''} = {result}")
-        return result
+q4v_text = """v) Functions improve:
+- Modularity: Isolated logic
+- Reusability: add() used anywhere
+- Readability: calc.add(x,y) clearer than x+y
+- Maintainability: Fix once, affects all"""
+doc.add_paragraph(q4v_text)
 
-    def save_history(self):
-        with open("calc_history.json", "w") as f:
-            json.dump(self.history, f)
-
-# Secure Login
+q4viii_text = """viii) Secure Authentication:
 class SecureAuth:
-    def login(self, id, pwd):
-        return hashlib.sha256(pwd.encode()).hexdigest() == stored_hash
+    def hash_password(self, password: str):
+        return hashlib.sha256(password.encode()).hexdigest()
+    def login(self, reg_no: str, password: str) -> bool:
+        # Secure hash comparison"""
+doc.add_paragraph(q4viii_text)
 
-# Output of Student Demo
-name, regno, studeno Kizza Moses 2025/U/123 216022204
-name, regno, studeno Nakato Sarah 2025/U/124 216002774
-Course: Computer Science'''
-    add_section(doc, "QUESTION 4: Full Calculator + Auth + Output", q4_full, is_code=True, language="Python")
+q4ix_text = """ix) Output:
+name, regno, studeno OKUJA EMMANUEL 25/U/28777/PSA 2500728777
+name, regno, studeno WASSWA KATEREGGA MAURICE 25/U/03613/PSA 2500703613
+Course: Computer Science"""
+doc.add_paragraph(q4ix_text)
 
-    # Save
-    filename = "Coursework_1_and_2_Report.docx"
-    doc.save(filename)
-    print(f"Report generated: {filename}")
-
-if __name__ == "__main__":
-    generate_python_report()
+# ==============================
+# SAVE DOCUMENT
+# ==============================
+filename = "Final_Answers_Group9.docx"
+doc.save(filename)
+print(f"{filename} generated successfully!")
