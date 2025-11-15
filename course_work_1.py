@@ -9,9 +9,7 @@ from docx import Document
 from docx.shared import Pt
 from typing import List, Dict, Tuple
 
-# ==============================
-# GRADE TO GP MAPPING (From Table)
-# ==============================
+
 GRADE_TO_GP = {
     'A+': 5.0, 'A': 5.0,
     'B+': 4.5,
@@ -39,9 +37,8 @@ MARKS_TO_GRADE = {
     (0, 39): 'F'
 }
 
-# ==============================
-# CLASS: StudentCGPA
-# ==============================
+
+
 class StudentCGPA:
     def __init__(self, student_id: str, name: str):
         self.student_id = student_id
@@ -49,9 +46,8 @@ class StudentCGPA:
         self.history = []  # List of semester records
         self.load_history()
 
-    # -----------------------
-    # Input Handling
-    # -----------------------
+    
+
     def input_semester_data(self) -> Dict:
         print(f"\n--- Entering Data for {self.name} ({self.student_id}) ---")
         courses = []
@@ -73,9 +69,8 @@ class StudentCGPA:
             })
         return {'courses': courses, 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M")}
 
-    # -----------------------
-    # Grade Calculation
-    # -----------------------
+    
+
     def marks_to_grade(self, marks: float) -> str:
         for (low, high), grade in MARKS_TO_GRADE.items():
             if low <= marks <= high:
@@ -98,9 +93,7 @@ class StudentCGPA:
         else:
             return "Fail"
 
-    # -----------------------
-    # File Management
-    # -----------------------
+    
     def get_filename(self) -> str:
         return f"cgpa_history_{self.student_id}.txt"
 
@@ -132,9 +125,7 @@ class StudentCGPA:
             except Exception as e:
                 print(f"Error loading file: {e}. Starting fresh.")
 
-    # -----------------------
-    # Add Semester & Save
-    # -----------------------
+    
     def add_semester(self, semester_name: str):
         data = self.input_semester_data()
         cgpa = self.calculate_cgpa(data)
@@ -151,9 +142,7 @@ class StudentCGPA:
         self.generate_word_report(record)
         print(f"\nCGPA for {semester_name}: {cgpa} → {classification}")
 
-    # -----------------------
-    # Generate Word Document
-    # -----------------------
+    
     def generate_word_report(self, record: Dict):
         doc = Document()
         doc.add_heading('CGPA Calculation Report', 0)
@@ -191,9 +180,7 @@ class StudentCGPA:
         except Exception as e:
             print(f"Error saving Word document: {e}")
 
-# ==============================
-# BASIC CALCULATOR FUNCTION
-# ==============================
+
 def basic_calculator() -> Dict:
     # Student numbers
     students = [216022204, 216002204, 216007570, 216002774]
@@ -223,9 +210,7 @@ def basic_calculator() -> Dict:
         'operations': operations
     }
 
-# ==============================
-# MAIN EXECUTION
-# ==============================
+
 def main():
     print("=== CGPA & BASIC CALCULATOR SYSTEM ===\n")
 
