@@ -1,8 +1,13 @@
-# cgpa_calculator.py
-# Author: Group Member (Teamwork Encouraged)
+#QUESTION (1-3)=== COURSEWORK 1
+""" Author: OKUJA EMMANUEL DILA JOHN 2500728777  25/U//28777/PSA
+            WASSWA KATEREGGA MAURICE 
+            NANFUKA JUSTINE 
+            WAMIMBI CHRISTIAN 
+""" 
 # Date: November 15, 2025
 # Purpose: CGPA Calculator + Basic Calculator with File I/O and Word Export
 
+# QUESTION 1
 import os
 from datetime import datetime
 from docx import Document
@@ -250,3 +255,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#QUESTION 2
+#QUESTION 3
+
+#a) Handle division by zero in average calculation
