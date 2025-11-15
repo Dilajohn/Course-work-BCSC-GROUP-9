@@ -21,7 +21,7 @@ Functions improve code in the following ways:
     *Organization: Group related functions in modules (easier navigation)
 """
 
-# calculator.py
+# calculator
 import os
 import math
 import json
@@ -170,3 +170,164 @@ student2 = CS_Student('25/U/03613/PSA', 'WASSWA KATEREGGA MAURICE', 2500703613)
 
 student1.print_student_details()
 student2.print_student_details()
+
+
+#Question 5
+#python code
+# generate_report.py
+# Generates a complete Word document with outputs from Q1 to Q4
+# Includes updated Q3(c) and full Q4 calculator
+
+from docx import Document
+from docx.shared import Pt, Inches
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from datetime import datetime
+import os
+
+# ==============================
+# Helper: Add section with title and content
+# ==============================
+def add_section(doc, title, content, is_code=False, language=""):
+    p = doc.add_paragraph()
+    run = p.add_run(title)
+    run.bold = True
+    run.font.size = Pt(14)
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+    if is_code:
+        para = doc.add_paragraph()
+        para.paragraph_format.space_before = Pt(6)
+        para.paragraph_format.space_after = Pt(6)
+        para.paragraph_format.left_indent = Inches(0.5)
+        run = para.add_run(content)
+        run.font.name = 'Courier New'
+        run.font.size = Pt(10)
+        if language:
+            lang_note = doc.add_paragraph(f"// Language: {language}", style='Caption')
+            lang_note.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    else:
+        for line in content.split('\n'):
+            if line.strip():
+                doc.add_paragraph(line, style='Normal')
+
+    doc.add_page_break()
+
+# ==============================
+# Main Document Generation
+# ==============================
+def generate_python_report():
+    doc = Document()
+    doc.add_heading('COURSEWORK 1 AND 2 2025NOV - FULL REPORT', 0)
+    doc.add_paragraph(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M')} EAT")
+    doc.add_paragraph("Student: Kizza Moses | Reg No: 2025/U/123 | ID: 216022204\n", style='Intense Quote')
+
+    # === QUESTION 1: CGPA + Basic Calculator ===
+    q1_code = '''# CGPA Calculator with File I/O and Word Export
+class StudentCGPA:
+    def __init__(self, student_id, name):
+        self.student_id = student_id
+        self.name = name
+        self.history = []
+        self.load_history()
+
+    def calculate_cgpa(self, courses):
+        total_gp_cu = sum(c['gp'] * c['cu'] for c in courses)
+        total_cu = sum(c['cu'] for c in courses)
+        return round(total_gp_cu / total_cu, 2) if total_cu else 0.0
+
+    def add_semester(self, semester_name):
+        # Input 4 courses...
+        cgpa = self.calculate_cgpa(courses)
+        self.history.append({"semester": semester_name, "cgpa": cgpa})
+        self.generate_word_report()
+
+def basic_calculator():
+    students = [216022204, 216002204, 216007570, 216002774]
+    total = sum(students)
+    num_str = str(total).lstrip('8')
+    cu = [int(num_str[i:i+2]) for i in range(0, 8, 2)]
+    return cu  # [64, 3, 47, 52]
+'''
+    add_section(doc, "QUESTION 1: CGPA + Basic Calculator", q1_code, is_code=True, language="Python")
+
+    # === QUESTION 2: C Struct ===
+    q2_code = '''struct course one;
+one.cName = "Data Structures";
+one.cCode = 1204;
+
+char buffer[100];
+printf("Enter Course Name: ");
+fgets(buffer, sizeof(buffer), stdin);
+one.cName = strdup(buffer);
+
+struct course* ptr = &one;
+printf("Code: %d", ptr->cCode);
+
+void weThink(struct course c);'''
+    add_section(doc, "QUESTION 2: C Structure Handling", q2_code, is_code=True, language="C")
+
+    # === QUESTION 3: Error Handling + OOP ===
+    q3_oop = '''i. Inheritance
+Inheritance allows a subclass to inherit attributes/methods from a superclass.
+class Animal:
+    def __init__(self, name): self.name = name
+    def speak(self): print("The animal makes a sound.")
+class Dog(Animal):
+    def speak(self): print(f"{self.name} barks.")
+my_dog = Dog("Buddy"); my_dog.speak()  # Buddy barks.
+
+ii. Encapsulation
+Bundles data and methods; hides internal state.
+class BankAccount:
+    def __init__(self, balance): self.__balance = balance
+    def deposit(self, amount):
+        if amount > 0: self.__balance += amount
+    def get_balance(self): return self.__balance
+account = BankAccount(100); account.deposit(50)
+
+iii. Polymorphism
+Same interface, different behavior.
+def make_animal_speak(animal): print(animal.speak())
+make_animal_speak(Dog())  # Woof!
+make_animal_speak(Cat())  # Meow!'''
+    add_section(doc, "QUESTION 3(c): OOP Concepts (Updated)", q3_oop, is_code=True, language="Python")
+
+    # === QUESTION 4: Full Calculator Class ===
+    q4_full = '''class Calculator:
+    def __init__(self):
+        self.history = []
+        self.ops = {'+': self.add, '-': self.subtract, '*': self.multiply, '/': self.divide,
+                    '^': self.power, 'sqrt': self.sqrt}
+
+    def add(self, a, b): return a + b
+    def divide(self, a, b):
+        if b == 0: raise ZeroDivisionError("Cannot divide by zero")
+        return a / b
+
+    def execute(self, op, a, b=None):
+        result = self.ops[op](a, b if b is not None else a)
+        self.history.append(f"{a} {op} {b if b else ''} = {result}")
+        return result
+
+    def save_history(self):
+        with open("calc_history.json", "w") as f:
+            json.dump(self.history, f)
+
+# Secure Login
+class SecureAuth:
+    def login(self, id, pwd):
+        return hashlib.sha256(pwd.encode()).hexdigest() == stored_hash
+
+# Output of Student Demo
+name, regno, studeno Kizza Moses 2025/U/123 216022204
+name, regno, studeno Nakato Sarah 2025/U/124 216002774
+Course: Computer Science'''
+    add_section(doc, "QUESTION 4: Full Calculator + Auth + Output", q4_full, is_code=True, language="Python")
+
+    # Save
+    filename = "Coursework_1_and_2_Report.docx"
+    doc.save(filename)
+    print(f"Report generated: {filename}")
+
+if __name__ == "__main__":
+    generate_python_report()
