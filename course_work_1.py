@@ -1,8 +1,9 @@
 #QUESTION (1-3)=== COURSEWORK 1
-""" Author: OKUJA EMMANUEL DILA JOHN 2500728777  25/U//28777/PSA
-            WASSWA KATEREGGA MAURICE 
-            NANFUKA JUSTINE 
-            WAMIMBI CHRISTIAN 
+""" 
+AuthorS: OKUJA EMMANUEL DILA JOHN   2500728777  25/U//28777/PSA
+         WASSWA KATEREGGA MAURICE   2500703613  25/U/03613/PSA
+         NANFUKA JUSTINE            2500703528  25/U/03528/PS
+         WAMIMBI CHRISTIAN          2500730993  25/U/30993/PSA 
 """ 
 # Date: November 15, 2025
 # Purpose: CGPA Calculator + Basic Calculator with File I/O and Word Export
@@ -257,7 +258,243 @@ if __name__ == "__main__":
     main()
 
 
-#QUESTION 2
-#QUESTION 3
+#QUESTION TWO 
+"""
+a) Initialize the structure members
+struct course {
+    char* cName;
+    int cCode;
+} one;
 
+one.cName = "Computer Architecture";
+one.cCode = 1104;
+
+b) Allow user input via keyboard
+#include <stdio.h>
+#include <stdlib.h>
+
+struct course {
+    char* cName;
+    int cCode;
+} one;
+
+int main() {
+    char buffer[100];
+
+    printf("Enter Course Name: ");
+    fgets(buffer, sizeof(buffer), stdin);
+    buffer[strcspn(buffer, "\n")] = 0;  
+    one.cName = malloc(strlen(buffer) + 1);
+    strcpy(one.cName, buffer);
+
+    printf("Enter Course Code: ");
+    scanf("%d", &one.cCode);
+
+    return 0;
+}
+
+b) Allow user input via keyboard
+#include <stdio.h>
+#include <stdlib.h>
+
+struct course {
+    char* cName;
+    int cCode;
+} one;
+
+int main() {
+    char buffer[100];
+
+    printf("Enter Course Name: ");
+    fgets(buffer, sizeof(buffer), stdin);
+    buffer[strcspn(buffer, "\n")] = 0;  // Remove newline
+    one.cName = malloc(strlen(buffer) + 1);
+    strcpy(one.cName, buffer);
+
+    printf("Enter Course Code: ");
+    scanf("%d", &one.cCode);
+
+    return 0;
+}
+
+c) Declare and use pointer to access cCode
+
+struct course* ptr = &one;
+printf("Course Code via pointer: %d\n", ptr->cCode);
+
+d) Function prototype for weThink (pass by value)
+
+void weThink(struct course c);
+
+"""
+
+
+
+#QUESTION 3
 #a) Handle division by zero in average calculation
+def calculate_average(amount_collected: int, number_of_users: int) -> float:
+    try:
+        average = amount_collected / number_of_users
+        return average
+    except ZeroDivisionError:
+        print("Error: Cannot divide by zero")
+        return 0.0
+
+#b) Handle missing file with try/except
+try:
+    with open("report.txt", "r") as file:
+        content = file.read()
+        print("File content:\n", content)
+except FileNotFoundError:
+    print("File not found.")
+
+#c) OOP Concepts
+"""i. Inheritance
+Inheritance is a concept in Object-Oriented Programming (OOP) that allows a new class (the child or subclass) to
+ inherit properties and behaviors from an existing class (the parent or superclass). This creates a hierarchical 
+ "is-a" relationship, such as a "dog is an animal".
+
+Importance in Large Applications
+
+    *Code Reusability: It allows you to define common attributes and methods once in a parent class, and child 
+    classes can automatically reuse them, which reduces code duplication and speeds up development.
+    *Extensibility: New classes can be added easily by inheriting from existing ones, extending their functionality
+     without modifying the original code.
+    *Organization: It helps in structuring code in a logical, hierarchical manner, making large codebases easier 
+    to understand and maintain. """
+
+class Animal:
+    # Parent class
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        print("The animal makes a sound.")
+
+class Dog(Animal):
+    # Child class inheriting from Animal
+    def speak(self):
+        print(f"{self.name} barks.")
+
+my_dog = Dog("Buddy")
+my_dog.speak()  # Output: Buddy barks.
+
+#the Dog class inherits from Animal, automatically getting the name attribute.
+#  It then overrides the speak method to provide its own specific behavior. 
+
+"""ii. Encapsulation 
+Encapsulation is the practice of bundling an object's data (attributes) and the methods that operate on that data 
+into a single unit, which is the class itself. A key aspect of encapsulation is data hiding, where the internal state
+ of an object is protected from direct external access. Access to this data is managed through public methods, often
+  called "getters" and "setters".
+
+Importance in Large Applications
+
+    *Data Integrity and Security: It protects an object's internal data from unauthorized or unintended changes,
+      ensuring that the data remains in a valid state.
+    *Modularity: Encapsulation hides the implementation details of a class, allowing developers to change the
+     internal workings without affecting other parts of the program that use the class.
+    *Simplified Maintenance: By creating a clear interface for a class, it becomes easier to maintain and debug
+     code, as any changes to a class's internal logic will not affect the external code that uses it.""" 
+
+class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # Private attribute using double underscore
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"Deposited: {amount}. New balance: {self.__balance}")
+
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(100)
+# This will raise an error because __balance is private
+# print(account.__balance)
+
+account.deposit(50)  # Correct way to interact with the data
+# Output: Deposited: 50. New balance: 150
+
+#a double underscore (__) before an attribute name causes name mangling, making the attribute private and not
+#  directly accessible from outside the class. The deposit method and get_balance method are the public interfaces
+#  for interacting with the __balance data. 
+
+"""iii. Polymorphism 
+Polymorphism, which means "many forms," is the ability of an object to take on different forms or for a single
+ action to be performed in different ways. It is often achieved through inheritance, where subclasses provide their
+  own specific implementation of a method that is defined in their common superclass. 
+
+Importance in Large Applications
+
+    *Flexibility and Extensibility: It allows you to write generic code that can work with objects of different
+     types, as long as they share a common interface. This makes it easy to add new classes without changing existing
+      code.
+    *Code Reusability: Polymorphism allows a single function or method to handle objects from multiple different
+     classes, reducing the need for lengthy conditional statements (if/elif/else).
+    *Simplified System Design: It enables you to program to an interface rather than a specific implementation,
+     making your code more modular and loosely coupled. """
+
+
+class Dog:
+    def speak(self):
+        return "Woof!"
+
+class Cat:
+    def speak(self):
+        return "Meow!"
+
+class Duck:
+    def speak(self):
+        return "Quack!"
+
+def make_animal_speak(animal):
+    # This function works for any object that has a 'speak' method
+    print(animal.speak())
+
+dog = Dog()
+cat = Cat()
+duck = Duck()
+
+make_animal_speak(dog)   # Output: Woof!
+make_animal_speak(cat)   # Output: Meow!
+make_animal_speak(duck)  # Output: Quack!
+
+#the make_animal_speak function can accept any object with a speak() method. The function doesn't need to know the
+#  specific type of object passed to it; it simply calls the speak() method, and the appropriate implementation is 
+# executed at runtime based on the object's type.  
+
+#question 3 
+#ii) Polymorphism in Python – Two Ways
+# 1. Method Overriding (Runtime Polymorphism)
+class Product:
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    def apply_discount(self):
+        return self.price  # No discount
+
+class Electronics(Product):
+    def apply_discount(self):  # Override
+        return self.price * 0.9   # 10% off
+
+class Clothing(Product):
+    def apply_discount(self):  # Override
+        return self.price * 0.8   # 20% off
+
+# 2. Duck Typing (No inheritance needed)
+def apply_store_discount(item):
+    return item.apply_discount()  # Works if object has method
+
+# === Usage Example ===
+products = [
+    Electronics("Laptop", 500000, 5),
+    Clothing("T-Shirt", 15000, 50),
+    Product("Book", 8000, 100)
+]
+
+print("After Discounts:")
+for p in products:
+    print(f"{p.name}: {apply_store_discount(p):,.0f} UGX")
