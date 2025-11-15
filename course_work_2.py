@@ -79,11 +79,11 @@ class Calculator:
 
     #  File I/O (vi)
     def save_history(self): 
-        # (Same as above)
+        
         ...
 
     def load_history(self): 
-        # (Same as above)
+       
         ...
 
     def show_history(self):
@@ -174,7 +174,6 @@ student2.print_student_details()
 
 
 #question 5
-# q5_final_python.py
 # Group 9 Final Submission
 # Generates Final_Answers_Group9.docx with ALL Q1–Q4 outputs
 
@@ -182,14 +181,14 @@ from docx import Document
 from docx.shared import Pt
 from datetime import datetime
 
-# ==============================
+
 # CREATE DOCUMENT
-# ==============================
+
 doc = Document()
 
-# ==============================
+
 # GROUP HEADER
-# ==============================
+
 doc.add_heading('FINAL ANSWERS - QUESTIONS 1 TO 4', 0)
 doc.add_paragraph("GROUP 9", style='Intense Quote')
 
@@ -207,9 +206,9 @@ for author in authors:
 doc.add_paragraph(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')} EAT")
 doc.add_paragraph("")
 
-# ==============================
+
 # QUESTION 1: CGPA + Basic Calculator
-# ==============================
+
 doc.add_heading('QUESTION 1: CGPA + Basic Calculator', 1)
 
 # Basic Calculator Output
@@ -265,9 +264,9 @@ doc.add_paragraph(cgpa2_text)
 
 doc.add_page_break()
 
-# ==============================
+
 # QUESTION 2: C Structure
-# ==============================
+
 doc.add_heading('QUESTION 2: C Structure Handling', 1)
 q2_text = """a) Initialization:
 struct course one;
@@ -293,9 +292,9 @@ doc.add_paragraph(q2_text)
 
 doc.add_page_break()
 
-# ==============================
+
 # QUESTION 3: Error Handling + OOP
-# ==============================
+
 doc.add_heading('QUESTION 3: Error Handling + OOP', 1)
 
 q3a_text = """a) Division by Zero:
@@ -344,9 +343,9 @@ doc.add_paragraph(oop_text)
 
 doc.add_page_break()
 
-# ==============================
+
 # QUESTION 4: Calculator + Auth + Output
-# ==============================
+
 doc.add_heading('QUESTION 4: Calculator + Auth + Output', 1)
 
 q4v_text = """v) Functions improve:
@@ -370,9 +369,81 @@ name, regno, studeno WASSWA KATEREGGA MAURICE 25/U/03613/PSA 2500703613
 Course: Computer Science"""
 doc.add_paragraph(q4ix_text)
 
-# ==============================
-# SAVE DOCUMENT
-# ==============================
+
 filename = "Final_Answers_Group9.docx"
 doc.save(filename)
 print(f"{filename} generated successfully!")
+
+
+#question 5
+#c program code
+"""
+// Group 9 Final Submission
+// Generates Final_Answers_Group9.rtf 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+void write(FILE *f, const char *s) {
+    for (int i = 0; s[i]; i++) {
+        if (s[i] == '\n') fprintf(f, "\\par ");
+        else if (s[i] == '{') fprintf(f, "\\{");
+        else if (s[i] == '}') fprintf(f, "\\}");
+        else if (s[i] == '\\') fprintf(f, "\\\\");
+        else fprintf(f, "%c", s[i]);
+    }
+}
+
+int main() {
+    FILE *f = fopen("Final_Answers_Group9.rtf", "w");
+    if (!f) {
+        printf("Error creating file.\n");
+        return 1;
+    }
+
+    fprintf(f, "{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Arial;}{\\f1 Courier New;}}\n");
+    fprintf(f, "\\f0\\fs32\\b FINAL ANSWERS - QUESTIONS 1 TO 4\\b0\\par\\par\n");
+    fprintf(f, "\\b GROUP 9\\b0\\par\\par\n");
+
+    // Group Members
+    fprintf(f, "\\b Author: OKUJA EMMANUEL DILA JOHN      2500728777    25/U/28777/PSA\\b0\\par\n");
+    fprintf(f, "\\b Author: WASSWA KATEREGGA MAURICE      2500703613    25/U/03613/PSA\\b0\\par\n");
+    fprintf(f, "\\b Author: NANFUKA JUSTINE               2500703528    25/U/03528/PS\\b0\\par\n");
+    fprintf(f, "\\b Author: WAMIMBI CHRISTIAN             2500730993    25/U/30993/PSA\\b0\\par\\par\n");
+
+    time_t t = time(NULL);
+    fprintf(f, "Generated: %s\\par\\par\\page\n", ctime(&t));
+
+    // Q1
+    fprintf(f, "\\b QUESTION 1 OUTPUTS\\b0\\par\\par\n");
+    write(f, "Basic Calculator:\\par\n");
+    write(f, "Sum: 864034752  CUs: 64,3,47,52\\par\n");
+    write(f, "Addition: 166  Division: 21.33\\par\\par\n");
+
+    write(f, "CGPA Semester 1: 5.0 (Distinction)\\par\n");
+    write(f, "CSC 1105: 96.0 → A+\\par\\par\\page\n");
+
+    // Q2
+    fprintf(f, "\\b QUESTION 2\\b0\\par\\par\n");
+    write(f, "one.cName = \"Computer Architecture\";\\par\n");
+    write(f, "ptr->cCode\\par\\page\n");
+
+    // Q3
+    fprintf(f, "\\b QUESTION 3\\b0\\par\\par\n");
+    write(f, "try: open(\"report.txt\")\\par\n");
+    write(f, "except FileNotFoundError: print(\"File not found.\")\\par\\page\n");
+
+    // Q4
+    fprintf(f, "\\b QUESTION 4\\b0\\par\\par\n");
+    write(f, "Output:\\par\n");
+    write(f, "name, regno, studeno OKUJA EMMANUEL 25/U/28777/PSA 2500728777\\par\n");
+    write(f, "Course: Computer Science\\par\n");
+
+    fprintf(f, "}");
+    fclose(f);
+    printf("Final_Answers_Group9.rtf created! Open in Word.\n");
+    return 0;
+}
+"""
