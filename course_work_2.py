@@ -8,442 +8,283 @@ AuthorS: OKUJA EMMANUEL DILA JOHN   2500728777  25/U//28777/PSA
 """ 
 # Date: November 15, 2025
 
-#QUESTION  4
-""" 
-v) How functions improve readability and reusability
-
-Functions improve code in the following ways:
-    *Modularity: Each operation is isolated  easy to test/debug.
-    *Reusability: add() can be used anywhere, not just in calculator.
-    *Readability: result = calc.add(x, y) ,is clearer than x + y in complex logic.
-    *Maintainability: Fix divide() once and it affects all uses.
-    *Abstraction: User sees calc.power(2, 3) (it's not 2**3)
-    *Organization: Group related functions in modules (easier navigation)
-"""
-
-# calculator
-import os
+# final_calculator_uganda.py
 import math
 import json
 from datetime import datetime
-from typing import Callable, Dict, List
+
+# Pre-saved students (your real details)
+ALLOWED_STUDENTS = {
+    "OKUJA EMMANUEL DILA JOHN": "2500728777",
+    "WASSWA KATEREGGA MAURICE": "2500703613"
+}
+
 class Calculator:
     def __init__(self):
-        self.history: List[Dict] = []
-        self.operation_map: Dict[str, Callable] = {
-            '+': self.add, '-': self.subtract, '*': self.multiply, '/': self.divide,
-            '^': self.power, 'sqrt': self.sqrt, 'sin': self.sin, 'cos': self.cos, 'tan': self.tan
-        }
+        self.history = []                    # iii) List for history
         self.load_history()
 
-    #  Operations (iv) 
-    def add(self, a: float, b: float) -> float: return a + b
-    def subtract(self, a: float, b: float) -> float: return a - b
-    def multiply(self, a: float, b: float) -> float: return a * b
-    def divide(self, a: float, b: float) -> float:
-        if b == 0: raise ZeroDivisionError("Cannot divide by zero")
-        return a / b
-    def power(self, a: float, b: float) -> float: return a ** b
-    def sqrt(self, a: float) -> float:
-        if a < 0: raise ValueError("Cannot compute square root of negative number")
-        return math.sqrt(a)
-    def sin(self, a: float) -> float: return math.sin(math.radians(a))
-    def cos(self, a: float) -> float: return math.cos(math.radians(a))
-    def tan(self, a: float) -> float: return math.tan(math.radians(a))
-
-    # Input & Execution (ii, iv) 
-    def execute_operation(self, op: str, a: float, b: float = None) -> float:
-        if op not in self.operation_map:
-            raise ValueError("Unsupported operation")
-        func = self.operation_map[op]
-        try:
-            if op in ['sqrt', 'sin', 'cos', 'tan']:
-                result = func(a)
-            else:
-                result = func(a, b)
-            self.log_calculation(op, a, b, result)
-            return result
-        except Exception as e:
-            print(f"Error: {e}")
-            return None
-
-    def log_calculation(self, op: str, a: float, b: float, result: float):
-        entry = {
-            "operation": op,
-            "input": [a, b] if b is not None else [a],
-            "result": result,
-            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # iii) Dictionary maps symbols to functions → easy to extend!
+        self.operations = {
+            '+': self.add,
+            '-': self.subtract,
+            '*': self.multiply,
+            '/': self.divide,
+            '**': self.power,        # Exponentiation
+            'sqrt': self.sqrt,       # Square root
+            'sin': self.sin,
+            'cos': self.cos,
+            'tan': self.tan
         }
+
+    # iv) Separate function for each operation
+    def add(self, a, b=0):      return a + b
+    def subtract(self, a, b=0): return a - b
+    def multiply(self, a, b=0): return a * b
+    def divide(self, a, b=0):
+        if b == 0:
+            print("Error: Division by zero!")
+            return None
+        return a / b
+    def power(self, a, b=0):     return a ** b
+    def sqrt(self, a, b=0):
+        if a < 0:
+            print("Error: Cannot take sqrt of negative!")
+            return None
+        return math.sqrt(a)
+    def sin(self, a, b=0):       return math.sin(math.radians(a))
+    def cos(self, a, b=0):       return math.cos(math.radians(a))
+    def tan(self, a, b=0):       return math.tan(math.radians(a))
+
+    # File management - saves history permanently
+    def save_history(self):
+        try:
+            with open("calculator_history.json", "w") as f:
+                json.dump(self.history, f)
+        except:
+            pass
+
+    def load_history(self):
+        try:
+            with open("calculator_history.json", "r") as f:
+                self.history = json.load(f)
+        except:
+            self.history = []
+
+    def add_to_history(self, text):
+        time = datetime.now().strftime("%d-%m-%Y %I:%M %p")
+        entry = f"{time} → {text}"
         self.history.append(entry)
         self.save_history()
 
-    #  File I/O (vi)
-    def save_history(self): 
-        
-        ...
-
-    def load_history(self): 
-       
-        ...
-
     def show_history(self):
         if not self.history:
-            print("No history.")
+            print("\nNo history yet.\n")
+        else:
+            print("\nYOUR CALCULATION HISTORY")
+            print("-" * 50)
+            for h in self.history[-10:]:
+                print(h)
+            print("-" * 50 + "\n")
+
+    # Main program with login and 3 options only
+    def start(self):
+        print("ADVANCED CALCULATOR - UGANDA STUDENT VERSION")
+        print("=" * 50)
+
+        # Login
+        name = input("\nEnter full name: ").strip().upper()
+        stud_no = input("Enter student number: ").strip()
+
+        if name in ALLOWED_STUDENTS and ALLOWED_STUDENTS[name] == stud_no:
+            print(f"\nWelcome {name.title()}! Access Granted\n")
+        else:
+            print("\nIncorrect details. Goodbye!")
             return
-        print("\n=== Calculation History ===")
-        for i, h in enumerate(self.history[-10:], 1):
-            inp = " & ".join(map(str, h["input"]))
-            print(f"{i}. {inp} {h['operation']} → {h['result']}")
+
+        while True:
+            print("MAIN MENU")
+            print("1. Perform Calculation")
+            print("2. View History")
+            print("3. Exit")
+            choice = input("\nChoose (1/2/3): ").strip()
+
+            # Option 1: Perform Calculation
+            if choice == "1":
+                print("\nAvailable operations:")
+                print("+  -  *  /  ** (power)  sqrt  sin  cos  tan")
+                op = input("\nEnter operation: ").strip()
+
+                # ii) Conditional check for valid operation
+                if op not in self.operations:
+                    print("Invalid operation!\n")
+                    continue
+
+                try:
+                    if op in ['sqrt', 'sin', 'cos', 'tan']:
+                        num = float(input("Enter number (degrees for trig): "))
+                        result = self.operations[op](num)
+                        expr = f"{op}({num})"
+                    else:  # two-number operations
+                        a = float(input("Enter first number: "))
+                        b = float(input("Enter second number: "))
+                        result = self.operations[op](a, b)
+                        expr = f"{a} {op} {b}"
+
+                    if result is not None:
+                        print(f"\nResult: {result}\n")
+                        self.add_to_history(f"{expr} = {result}")
+
+                except ValueError:
+                    print("Please enter valid numbers!\n")
+
+            # Option 2: View History
+            elif choice == "2":
+                self.show_history()
+
+            # Option 3: Exit
+            elif choice == "3":
+                print("Thank you for using the calculator!")
+                break
+            else:
+                print("Please choose 1, 2 or 3 only!\n")
 
 
+# Run the program
+if __name__ == "__main__":
+    calc = Calculator()
+    calc.start()
 
-#viii) You developed a CGPA software solution in your coursework. You are then tasked with
-#creating and adding a secure system form that captures the student details in that
-#application to authenticate users.
-
+"""
+viii) You developed a CGPA software solution in your coursework. You are then tasked with
+creating and adding a secure system form that captures the student details in that
+application to authenticate users.
+"""
+# cgpa_secure_login.py
+# Simple secure login system for your CGPA Calculator
+import json
 import hashlib
+import getpass
 
-class SecureAuth:
+# File where student accounts will be saved
+USER_FILE = "cgpa_students.json"
+
+# Simple password hashing (secure enough for school project)
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Load existing students from file
+def load_students():
+    try:
+        with open(USER_FILE, "r") as file:
+            return json.load(file)
+    except:
+        return {}  # If file doesn't exist, start empty
+
+# Save students to file
+def save_students(students):
+    with open(USER_FILE, "w") as file:
+        json.dump(students, file, indent=4)
+
+# Main Authentication Class (Simple & Clean)
+class CGPAAuth:
     def __init__(self):
-        self.users = self.load_users()
+        self.students = load_students()
 
-    def hash_password(self, password: str) : 
-        return hashlib.sha256(password.encode()).hexdigest()
+    # Register new student
+    def register(self):
+        print("\n=== REGISTER NEW STUDENT ===")
+        reg_no = input("Enter Registration Number (e.g. 25/U/28777/PSA): ").strip()
+        name = input("Enter Full Name: ").strip()
 
-    def register(self, reg_no: str, name: str, password: str):
-        if reg_no in self.users:
-            print("User already exists!")
+        if reg_no in self.students:
+            print("This Reg. Number is already registered!")
             return False
-        self.users[reg_no] = {
+
+        password = getpass.getpass("Create Password: ")
+        confirm = getpass.getpass("Confirm Password: ")
+
+        if password != confirm:
+            print("Passwords do not match!")
+            return False
+
+        # Save securely with hashed password
+        self.students[reg_no] = {
             "name": name,
-            "password_hash": self.hash_password(password)
+            "password": hash_password(password)
         }
-        self.save_users()
-        print("Registration successful!")
+        save_students(self.students)
+        print(f"Registration successful! Welcome {name}\n")
         return True
 
-    def login(self, reg_no: str, password: str): 
-        if reg_no not in self.users:
-            print("Invalid credentials.")
-            return False
-        stored_hash = self.users[reg_no]["password_hash"]
-        if stored_hash == self.hash_password(password):
-            print(f"Welcome, {self.users[reg_no]['name']}!")
-            return True
-        print("Invalid credentials.")
-        return False
+    # Login student
+    def login(self):
+        print("\n=== CGPA SYSTEM LOGIN ===")
+        reg_no = input("Registration Number: ").strip()
+        password = getpass.getpass("Password: ")
 
-    def save_users(self):
-        try:
-            with open("users.json", "w") as f:
-                json.dump(self.users, f)
-        except: pass
+        if reg_no in self.students:
+            if self.students[reg_no]["password"] == hash_password(password):
+                print(f"\nLogin Successful! Welcome {self.students[reg_no]['name']}!")
+                return reg_no  # Login success
+            else:
+                print("Wrong password!")
+                return None
+        else:
+            print("Registration Number not found!")
+            return None
 
-    def load_users(self):
-        try:
-            with open("users.json", "r") as f:
-                return json.load(f)
-        except: return {}
+# Run the secure system
+if __name__ == "__main__":
+    auth = CGPAAuth()
 
+    while True:
+        print("\n" + "="*40)
+        print("   CGPA CALCULATOR - SECURE LOGIN")
+        print("="*40)
+        print("1. Register (First time users)")
+        print("2. Login")
+        print("3. Exit")
+        choice = input("\nChoose option (1/2/3): ")
 
-#ix) What is the output of the piece of program below once it's corrected, completed and
-#executed. Replace the student details with your own details
+        if choice == "1":
+            auth.register()
+        elif choice == "2":
+            user = auth.login()
+            if user:
+                print("\nYou now have access to the CGPA Calculator!")
+                print("Your CGPA software is now unlocked")
+                # Here you can call your main CGPA program
+                break
+        elif choice == "3":
+            print("Thank you. Goodbye!")
+            break
+        else:
+            print("Please choose 1, 2 or 3 only!")
+
+"""
+ix) What is the output of the piece of program below once it's corrected, completed and
+executed. Replace the student details with your own details
+"""
 class Student:
     def __init__(self, reg_number, name, stud_number):
         self.reg_number = reg_number
         self.name = name
-        self.stud_number = stud_number
+        self.stud_number = stud_number  # Fixed typo
 
     def print_student_details(self):
-        print('name, regno, studeno', self.name, self.reg_number, self.stud_number)
+        print('name, regno, studeno:', self.name, self.reg_number, self.stud_number)
 
 class CS_Student(Student):
     course = 'Computer Science'
 
     def print_student_details(self):
-        Student.print_student_details(self)
+        super().print_student_details()  
         print('Course:', CS_Student.course)
 
 
-student1 = Student('25/U/28777/PSA', 'OKUJA EMMANUEL', 2500728777)
-student2 = CS_Student('25/U/03613/PSA', 'WASSWA KATEREGGA MAURICE', 2500703613)      
+student1 = Student('25/U/28777/PSA', 'OKUJA EMMANUEL DILA JOHN', 2500728777)
+student2 = CS_Student('25/U/03613/PSA', 'WASSWA KATEREGGA MAURICE', 2500703613)
 
 student1.print_student_details()
 student2.print_student_details()
-
-
-
-#question 5
-# Group 9 Final Submission
-# Generates Final_Answers_Group9.docx with ALL Q1–Q4 outputs
-
-from docx import Document
-from docx.shared import Pt
-from datetime import datetime
-
-
-# CREATE DOCUMENT
-
-doc = Document()
-
-
-# GROUP HEADER
-
-doc.add_heading('FINAL ANSWERS - QUESTIONS 1 TO 4', 0)
-doc.add_paragraph("GROUP 9", style='Intense Quote')
-
-authors = [
-    "OKUJA EMMANUEL DILA JOHN      2500728777    25/U/28777/PSA",
-    "WASSWA KATEREGGA MAURICE      2500703613    25/U/03613/PSA",
-    "NANFUKA JUSTINE               2500703528    25/U/03528/PS",
-    "WAMIMBI CHRISTIAN             2500730993    25/U/30993/PSA"
-]
-
-for author in authors:
-    p = doc.add_paragraph(f"Author: {author}")
-    p.runs[0].bold = True
-
-doc.add_paragraph(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')} EAT")
-doc.add_paragraph("")
-
-
-# QUESTION 1: CGPA + Basic Calculator
-
-doc.add_heading('QUESTION 1: CGPA + Basic Calculator', 1)
-
-# Basic Calculator Output
-doc.add_heading('Basic Calculator Output', 2)
-basic_text = """Student Numbers: 216022204, 216002204, 216007570, 216002774
-Sum: 864034752
-Extracted CUs: CU1=64, CU2=3, CU3=47, CU4=52
-
-Results:
-• Addition: 166
-• Subtraction: -38
-• Multiplication: 469248
-• Division: 21.33"""
-doc.add_paragraph(basic_text)
-
-# CGPA Semester 1
-doc.add_heading('CGPA Semester 1 Output', 2)
-cgpa1_text = """CGPA Calculation Report
-Student ID: 2500728777
-Name: OKUJA EMMANUEL DILA JOHN
-Semester: Semester 1
-Date: 2025-11-15 12:45
-CGPA: 5.0 → Distinction
-
-Code | Course Name | Marks | Grade | GP | CU
-CSK 1101 | COMMUNICATION SKILLS | 80.0 | A | 5.0 | 4
-CSC 1102 | STRUCTURED AND OBJECT ORIENTED PROGRAMMING | 86.0 | A | 5.0 | 4
-CSC 1104 | COMMPUTER ORGANIZATION AND ARCHITECTURE | 89.0 | A | 5.0 | 4
-CSC 1105 | MATHEMATICS | 96.0 | A+ | 5.0 | 4
-
-Formula Used:
-CGPA = Σ(GPᵢ × CUᵢ) / ΣCUᵢ"""
-doc.add_paragraph(cgpa1_text)
-
-# CGPA Semester 2
-doc.add_heading('CGPA Semester 2 Output', 2)
-cgpa2_text = """CGPA Calculation Report
-Student ID: 2500728777
-Name: OKUJA EMMANUEL DILA JOHN
-Semester: Semester 2
-Date: 2025-11-15 12:52
-CGPA: 5.0 → Distinction
-
-Code | Course Name | Marks | Grade | GP | CU
-CSC 1200 | OPERATING SYSTEMS | 89.0 | A | 5.0 | 4
-CSC 1201 | PROBABILITY AND STATISTICS | 89.0 | A | 5.0 | 4
-CSC 1202 | SOFTWARE DEVELOPMENT AND DESIGN | 85.0 | A | 5.0 | 4
-IST 1204 | SYSTEMS ANALYSIS AND DESIGN | 90.0 | A+ | 5.0 | 4
-
-Formula Used:
-CGPA = Σ(GPᵢ × CUᵢ) / ΣCUᵢ"""
-doc.add_paragraph(cgpa2_text)
-
-doc.add_page_break()
-
-
-# QUESTION 2: C Structure
-
-doc.add_heading('QUESTION 2: C Structure Handling', 1)
-q2_text = """a) Initialization:
-struct course one;
-one.cName = "Computer Architecture";
-one.cCode = 1104;
-
-b) User Input:
-char buffer[100];
-printf("Enter Course Name: ");
-fgets(buffer, sizeof(buffer), stdin);
-buffer[strcspn(buffer, "\\n")] = 0;
-one.cName = malloc(strlen(buffer) + 1);
-strcpy(one.cName, buffer);
-scanf("%d", &one.cCode);
-
-c) Pointer Access:
-struct course* ptr = &one;
-printf("Course Code via pointer: %d\\n", ptr->cCode);
-
-d) Function Prototype:
-void weThink(struct course c);"""
-doc.add_paragraph(q2_text)
-
-doc.add_page_break()
-
-
-# QUESTION 3: Error Handling + OOP
-
-doc.add_heading('QUESTION 3: Error Handling + OOP', 1)
-
-q3a_text = """a) Division by Zero:
-def calculate_average(amount_collected: int, number_of_users: int) -> float:
-    try:
-        average = amount_collected / number_of_users
-        return average
-    except ZeroDivisionError:
-        print("Error: Cannot divide by zero")
-        return 0.0"""
-doc.add_paragraph(q3a_text)
-
-q3b_text = """b) File Not Found:
-try:
-    with open("report.txt", "r") as file:
-        content = file.read()
-        print("File content:\\n", content)
-except FileNotFoundError:
-    print("File not found.")"""
-doc.add_paragraph(q3b_text)
-
-doc.add_heading('c) OOP Concepts', 2)
-oop_text = """i. Inheritance
-Inheritance allows a subclass to inherit from a superclass.
-class Animal:
-    def __init__(self, name): self.name = name
-    def speak(self): print("The animal makes a sound.")
-class Dog(Animal):
-    def speak(self): print(f"{self.name} barks.")
-my_dog = Dog("Buddy"); my_dog.speak()  # Output: Buddy barks.
-
-ii. Encapsulation
-Bundles data and methods with access control.
-class BankAccount:
-    def __init__(self, balance): self.__balance = balance
-    def deposit(self, amount):
-        if amount > 0: self.__balance += amount
-    def get_balance(self): return self.__balance
-
-iii. Polymorphism
-Same interface, different behavior.
-def make_animal_speak(animal): print(animal.speak())
-make_animal_speak(Dog())  # Woof!
-make_animal_speak(Cat())  # Meow!"""
-doc.add_paragraph(oop_text)
-
-doc.add_page_break()
-
-
-# QUESTION 4: Calculator + Auth + Output
-
-doc.add_heading('QUESTION 4: Calculator + Auth + Output', 1)
-
-q4v_text = """v) Functions improve:
-- Modularity: Isolated logic
-- Reusability: add() used anywhere
-- Readability: calc.add(x,y) clearer than x+y
-- Maintainability: Fix once, affects all"""
-doc.add_paragraph(q4v_text)
-
-q4viii_text = """viii) Secure Authentication:
-class SecureAuth:
-    def hash_password(self, password: str):
-        return hashlib.sha256(password.encode()).hexdigest()
-    def login(self, reg_no: str, password: str) -> bool:
-        # Secure hash comparison"""
-doc.add_paragraph(q4viii_text)
-
-q4ix_text = """ix) Output:
-name, regno, studeno OKUJA EMMANUEL 25/U/28777/PSA 2500728777
-name, regno, studeno WASSWA KATEREGGA MAURICE 25/U/03613/PSA 2500703613
-Course: Computer Science"""
-doc.add_paragraph(q4ix_text)
-
-
-filename = "Final_Answers_Group9.docx"
-doc.save(filename)
-print(f"{filename} generated successfully!")
-
-
-#question 5
-#c program code
-"""
-// Group 9 Final Submission
-// Generates Final_Answers_Group9.rtf 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-void write(FILE *f, const char *s) {
-    for (int i = 0; s[i]; i++) {
-        if (s[i] == '\n') fprintf(f, "\\par ");
-        else if (s[i] == '{') fprintf(f, "\\{");
-        else if (s[i] == '}') fprintf(f, "\\}");
-        else if (s[i] == '\\') fprintf(f, "\\\\");
-        else fprintf(f, "%c", s[i]);
-    }
-}
-
-int main() {
-    FILE *f = fopen("Final_Answers_Group9.rtf", "w");
-    if (!f) {
-        printf("Error creating file.\n");
-        return 1;
-    }
-
-    fprintf(f, "{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Arial;}{\\f1 Courier New;}}\n");
-    fprintf(f, "\\f0\\fs32\\b FINAL ANSWERS - QUESTIONS 1 TO 4\\b0\\par\\par\n");
-    fprintf(f, "\\b GROUP 9\\b0\\par\\par\n");
-
-    // Group Members
-    fprintf(f, "\\b Author: OKUJA EMMANUEL DILA JOHN      2500728777    25/U/28777/PSA\\b0\\par\n");
-    fprintf(f, "\\b Author: WASSWA KATEREGGA MAURICE      2500703613    25/U/03613/PSA\\b0\\par\n");
-    fprintf(f, "\\b Author: NANFUKA JUSTINE               2500703528    25/U/03528/PS\\b0\\par\n");
-    fprintf(f, "\\b Author: WAMIMBI CHRISTIAN             2500730993    25/U/30993/PSA\\b0\\par\\par\n");
-
-    time_t t = time(NULL);
-    fprintf(f, "Generated: %s\\par\\par\\page\n", ctime(&t));
-
-    // Q1
-    fprintf(f, "\\b QUESTION 1 OUTPUTS\\b0\\par\\par\n");
-    write(f, "Basic Calculator:\\par\n");
-    write(f, "Sum: 864034752  CUs: 64,3,47,52\\par\n");
-    write(f, "Addition: 166  Division: 21.33\\par\\par\n");
-
-    write(f, "CGPA Semester 1: 5.0 (Distinction)\\par\n");
-    write(f, "CSC 1105: 96.0 → A+\\par\\par\\page\n");
-
-    // Q2
-    fprintf(f, "\\b QUESTION 2\\b0\\par\\par\n");
-    write(f, "one.cName = \"Computer Architecture\";\\par\n");
-    write(f, "ptr->cCode\\par\\page\n");
-
-    // Q3
-    fprintf(f, "\\b QUESTION 3\\b0\\par\\par\n");
-    write(f, "try: open(\"report.txt\")\\par\n");
-    write(f, "except FileNotFoundError: print(\"File not found.\")\\par\\page\n");
-
-    // Q4
-    fprintf(f, "\\b QUESTION 4\\b0\\par\\par\n");
-    write(f, "Output:\\par\n");
-    write(f, "name, regno, studeno OKUJA EMMANUEL 25/U/28777/PSA 2500728777\\par\n");
-    write(f, "Course: Computer Science\\par\n");
-
-    fprintf(f, "}");
-    fclose(f);
-    printf("Final_Answers_Group9.rtf created! Open in Word.\n");
-    return 0;
-}
-"""

@@ -488,7 +488,7 @@ class Clothing(Product):
 def apply_store_discount(item):
     return item.apply_discount()  # Works if object has method
 
-# === Usage Example ===
+#Example 
 products = [
     Electronics("Laptop", 500000, 5),
     Clothing("T-Shirt", 15000, 50),
