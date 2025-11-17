@@ -270,7 +270,7 @@ class Student:
     def __init__(self, reg_number, name, stud_number):
         self.reg_number = reg_number
         self.name = name
-        self.stud_number = stud_number  # Fixed typo
+        self.stud_number = stud_number 
 
     def print_student_details(self):
         print('name, regno, studeno:', self.name, self.reg_number, self.stud_number)
