@@ -6,14 +6,13 @@ AuthorS: OKUJA EMMANUEL DILA JOHN   2500728777  25/U//28777/PSA
          WAMIMBI CHRISTIAN          2500730993  25/U/30993/PSA
 
 """ 
-# Date: November 15, 2025
+# Date: November 17, 2025
 
-# final_calculator_uganda.py
 import math
 import json
 from datetime import datetime
 
-# Pre-saved students (your real details)
+
 ALLOWED_STUDENTS = {
     "OKUJA EMMANUEL DILA JOHN": "2500728777",
     "WASSWA KATEREGGA MAURICE": "2500703613"
@@ -186,7 +185,7 @@ def save_students(students):
     with open(USER_FILE, "w") as file:
         json.dump(students, file, indent=4)
 
-# Main Authentication Class (Simple & Clean)
+# Main Authentication Class 
 class CGPAAuth:
     def __init__(self):
         self.students = load_students()
@@ -234,7 +233,7 @@ class CGPAAuth:
             print("Registration Number not found!")
             return None
 
-# Run the secure system
+
 if __name__ == "__main__":
     auth = CGPAAuth()
 
@@ -254,7 +253,7 @@ if __name__ == "__main__":
             if user:
                 print("\nYou now have access to the CGPA Calculator!")
                 print("Your CGPA software is now unlocked")
-                # Here you can call your main CGPA program
+                
                 break
         elif choice == "3":
             print("Thank you. Goodbye!")
@@ -288,3 +287,156 @@ student2 = CS_Student('25/U/03613/PSA', 'WASSWA KATEREGGA MAURICE', 2500703613)
 
 student1.print_student_details()
 student2.print_student_details()
+
+
+#QUESTION 5
+
+
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+import os
+
+doc = Document()
+
+# Title
+title = doc.add_heading("COURSE WORK 1 AND 2", 0)
+title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+title.runs[0].font.size = Pt(18)
+title.runs[0].bold = True
+
+doc.add_paragraph("OKUJA EMMANUEL DILA JOHN\nStudent ID: 2500728777\nReg No: 25/U/28777/PSA\nDate: November 17, 2025", 
+                  style='Normal').alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+doc.add_page_break()
+
+# QUESTION 1
+doc.add_heading("QUESTION 1 – CGPA & BASIC CALCULATOR SYSTEM", level=1)
+
+doc.add_heading("Semester 1 – CGPA: 5.0 (Distinction)", level=2)
+t1 = doc.add_table(rows=5, cols=6)
+t1.style = 'Table Grid'
+hdr = t1.rows[0].cells
+headers = ["Code", "Course Name", "Marks", "Grade", "GP", "CU"]
+for i, h in enumerate(headers):
+    hdr[i].text = h
+    hdr[i].paragraphs[0].runs[0].bold = True
+
+sem1 = [
+    ["CSK 1101", "COMMUNICATION SKILLS", "89.0", "A", "5.0", "4"],
+    ["CSC 1102", "STRUCTURED AND OBJECT ORIENTED PROGRAMMING", "86.0", "A", "5.0", "4"],
+    ["CSC 1104", "COMPUTER ORGANIZATION AND ARCHITECTURE", "92.0", "A+", "5.0", "4"],
+    ["CSC 1105", "MATHEMATICS", "97.0", "A+", "5.0", "4"]
+]
+for row in sem1:
+    cells = t1.add_row().cells
+    for i, val in enumerate(row):
+        cells[i].text = val
+
+doc.add_heading("Semester 2 – CGPA: 5.0 (Distinction)", level=2)
+t2 = doc.add_table(rows=5, cols=6)
+t2.style = 'Table Grid'
+for i, h in enumerate(headers):
+    t2.rows[0].cells[i].text = h
+    t2.rows[0].cells[i].paragraphs[0].runs[0].bold = True
+
+sem2 = [
+    ["CSC 1200", "OPERATING SYSTEMS", "82.0", "A", "5.0", "4"],
+    ["CSC1201", "PROBABILITY AND STATISTICS", "93.0", "A+", "5.0", "4"],
+    ["CSC 1202", "SOFTWARE DEVELOPMENT", "96.0", "A+", "5.0", "4"],
+    ["CSC 1204", "DATA STRUCTURES AND ALGORITHMS", "87.0", "A", "5.0", "4"]
+]
+for row in sem2:
+    cells = t2.add_row().cells
+    for i, val in enumerate(row):
+        cells[i].text = val
+
+doc.add_paragraph("Formula Used: CGPA = Σ(GPᵢ × CUᵢ) / ΣCUᵢ\n", style='Intense Quote')
+
+doc.add_heading("Basic Calculator Report", level=2)
+doc.add_paragraph("Student Numbers: 216022204, 216002204, 216007570, 216002774")
+doc.add_paragraph("Sum: 864034752")
+doc.add_paragraph("Extracted CUs: CU1=64, CU2=03, CU3=47, CU4=52")
+tbl = doc.add_table(rows=5, cols=2)
+tbl.style = 'Table Grid'
+tbl.cell(0,0).text = "Operation"; tbl.cell(0,1).text = "Result"
+tbl.cell(0,0).paragraphs[0].runs[0].bold = True
+tbl.cell(0,1).paragraphs[0].runs[0].bold = True
+results = [("Addition", "166"), ("Subtraction", "-38"), ("Multiplication", "469248"), ("Division", "21.33")]
+for i, (op, res) in enumerate(results, 1):
+    tbl.cell(i,0).text = op
+    tbl.cell(i,1).text = res
+
+doc.add_page_break()
+
+# QUESTION 4
+doc.add_heading("QUESTION 4 – ADVANCED CALCULATOR WITH OOP", level=1)
+parts = [
+    
+    "v)   Functions improve readability, reusability, testing, and maintainability.",
+    "ix)  Output:\nname, regno, studeno: OKUJA EMMANUEL DILA JOHN 25/U/28777/PSA 2500728777\n"
+         "name, regno, studeno: WASSWA KATEREGGA MAURICE 25/U/03613/PSA 2500703613\nCourse: Computer Science"
+]
+
+for part in parts:
+    doc.add_paragraph(part)
+
+doc.add_page_break()
+doc.add_heading("GROUP MEMBERS", level=1)
+members = [
+    "OKUJA EMMANUEL DILA JOHN        2500728777     25/U/28777/PSA",
+    "WASSWA KATEREGGA MAURICE         2500703613    25/U/03613/PSA",
+    "NANFUKA JUSTINE                  2500703528    25/U/03528/PS",
+    "WAMIMBI CHRISTIAN                2500730993    25/U/30993/PSA"
+]
+for m in members:
+    doc.add_paragraph(m)
+
+# Save
+filename = "GROUP 9.docx"
+doc.save(filename)
+print(f"Python version generated: {os.path.abspath(filename)}")
+
+
+
+"""
+#c code
+// question5_c_generator.c
+#include <stdio.h>
+
+int main() {
+    FILE *f = fopen("GROUP 9.rtf", "w");
+    fprintf(f, "{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Courier New;}}\\f0\\fs24\n");
+    fprintf(f, "\\b\\fs32\\qc COURSE WORK 1 AND 2\\b0\\par\\par\n");
+    fprintf(f, "\\qc OKUJA EMMANUEL DILA JOHN\\par 2500728777 | 25/U/28777/PSA\\par November 17, 2025\\par\\par\\par\n");
+
+    fprintf(f, "\\b\\fs28 QUESTION 1 - CGPA RESULTS\\b0\\par\\par\n");
+    fprintf(f, "Semester 1 & 2: CGPA 5.0 (Distinction)\\par\\par\n");
+    fprintf(f, "Basic Calculator:\\par Sum: 864034752\\par CUs: 64, 03, 47, 52\\par ");
+    fprintf(f, "Addition: 166 | Subtraction: -38 | Multiplication: 469248 | Division: 21.33\\par\\par\\par\n");
+
+    fprintf(f, "\\b\\fs28 QUESTION 4 - ADVANCED CALCULATOR\\b0\\par\\par\n");
+    fprintf(f, "i)   Modular structure with error handling\\par\n");
+    fprintf(f, "ii)  if-else for validation\\par\n");
+    fprintf(f, "iii) List + Dictionary mapping\\par\n");
+    fprintf(f, "iv)  Separate functions for all operations\\par\n");
+    fprintf(f, "v)   Functions improve reusability\\par\n");
+    fprintf(f, "vi)  JSON file persistence\\par\n");
+    fprintf(f, "vii) Full OOP Calculator class\\par\n");
+    fprintf(f, "viii)Secure login with real student details\\par\n");
+    fprintf(f, "ix)  Output: OKUJA... 2500728777 and WASSWA... Course: Computer Science\\par\\par\\par\n");
+
+    fprintf(f, "\\b GROUP MEMBERS\\b0\\par\n");
+    fprintf(f, "OKUJA EMMANUEL DILA JOHN        2500728777    25/U/28777/PSA\\par\n");
+    fprintf(f, "WASSWA KATEREGGA MAURICE         2500703613    25/U/03613/PSA\\par\n");
+    fprintf(f, "NANFUKA JUSTINE                  2500703528    25/U/03528/PS\\par\n");
+    fprintf(f, "WAMIMBI CHRISTIAN                2500730993    25/U/30993/PSA\\par\\par\n");
+
+    fprintf(f, "}\\par\n");
+    fclose(f);
+    printf("C version generated: FINAL_SUBMISSION.rtf\n");
+    printf("Open with Microsoft Word - 100%% perfect!\n");
+    return 0;
+}
+
+    """

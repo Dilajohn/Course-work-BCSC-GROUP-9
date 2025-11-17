@@ -5,7 +5,7 @@ AuthorS: OKUJA EMMANUEL DILA JOHN   2500728777  25/U//28777/PSA
          NANFUKA JUSTINE            2500703528  25/U/03528/PS
          WAMIMBI CHRISTIAN          2500730993  25/U/30993/PSA 
 """ 
-# Date: November 15, 2025
+# Date: November 17, 2025
 # Purpose: CGPA Calculator + Basic Calculator with File I/O and Word Export
 
 # QUESTION 1
